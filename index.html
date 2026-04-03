@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="antialiased">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>ARISE PRIVÉ | Exclusive Circle</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@100;300;600&display=swap"
+    rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -12,11 +18,8 @@
   <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@100;300;600&display=swap');
-
     :root {
       --arise-purple: #8b5cf6;
-      --gold-soft: #d4af37;
       --bg-dark: #050505;
       --ivory: #f8f5f2;
     }
@@ -25,85 +28,79 @@
       background-color: var(--bg-dark);
       color: var(--ivory);
       font-family: 'Montserrat', sans-serif;
+      visibility: hidden;
+      opacity: 0;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
     }
 
     .font-serif {
       font-family: 'Cormorant Garamond', serif;
     }
 
-    /* Smooth Scroll Industrial */
-    html.lenis {
-      height: auto;
+    /* Performance & Layers */
+    .arise-card,
+    #hero-shoe,
+    .btn-arise {
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      will-change: transform, opacity;
     }
 
-    .lenis.lenis-smooth {
-      scroll-behavior: auto !important;
+    /* Estilo do Botão - Forçado para ser Visível */
+    .btn-arise {
+      position: relative;
+      z-index: 50;
+      /* Garante que fique acima de círculos e sombras */
+      display: inline-block;
+      padding: 1.2rem 3rem;
+      background: var(--arise-purple) !important;
+      color: #ffffff !important;
+      text-transform: uppercase;
+      letter-spacing: 0.4em;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      cursor: pointer;
+      border: none;
     }
 
-    /* SPOTLIGHT DYNAMICS (O efeito que você ama, otimizado) */
+    .btn-arise:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+      filter: brightness(1.1);
+    }
+
+    /* Cards com efeito Glassmorphism */
     .arise-card {
       position: relative;
-      background: linear-gradient(180deg, rgba(139, 92, 246, 0.03) 0%, rgba(0, 0, 0, 0) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-      backdrop-filter: blur(12px);
-    }
-
-    .arise-card:hover {
-      border-color: var(--arise-purple);
-      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
     }
 
     .card-glow {
       position: absolute;
       inset: 0;
-      background: radial-gradient(600px circle at var(--x) var(--y),
-          rgba(139, 92, 246, 0.12),
-          transparent 40%);
+      background: radial-gradient(600px circle at var(--x) var(--y), rgba(139, 92, 246, 0.15), transparent 40%);
       opacity: 0;
-      transition: opacity 0.5s ease;
       pointer-events: none;
+      transition: opacity 0.5s ease;
     }
 
     .arise-card:hover .card-glow {
       opacity: 1;
     }
 
-    /* Botão High-Fashion */
-    .btn-arise {
-      padding: 1.2rem 3.5rem;
-      background: var(--arise-purple);
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 0.5em;
-      font-size: 0.7rem;
-      font-weight: 600;
-      transition: all 0.4s ease;
-      box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2);
-    }
-
-    .btn-arise:hover {
-      transform: scale(1.05);
-      filter: brightness(1.2);
-      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
-    }
-
-    /* Animação de Texto */
-    .reveal-container {
-      overflow: hidden;
-    }
-
-    /* Ambient Light Background */
+    /* Background Ambient */
     .purple-blur {
       position: fixed;
       top: -10%;
       right: -10%;
-      width: 60vw;
-      height: 60vw;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.07), transparent 70%);
-      z-index: 0;
+      width: 80vw;
+      height: 80vw;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.08), transparent 70%);
+      z-index: -1;
       pointer-events: none;
     }
   </style>
@@ -113,176 +110,185 @@
 
   <div class="purple-blur"></div>
 
-  <nav class="fixed top-0 w-full z-[100] px-10 py-8 flex justify-between items-center mix-blend-difference">
-    <div class="font-serif text-3xl italic font-bold tracking-tighter">Arise <span
-        class="font-light not-italic text-[10px] tracking-[0.6em] uppercase opacity-60 ml-3">Privé</span></div>
-    <div class="hidden md:flex gap-10 text-[9px] uppercase tracking-[0.4em] font-light">
-      <a href="https://streetarise.com" target="_blank" class="hover:text-purple-400 transition">Official Store</a>
-      <a href="#" class="hover:text-purple-400 transition">Instagram</a>
+  <nav class="fixed top-0 w-full z-[100] px-8 py-8 flex justify-between items-center mix-blend-difference">
+    <div class="font-serif text-3xl italic font-bold">Arise <span
+        class="text-[10px] tracking-[0.6em] uppercase opacity-60 ml-2">Privé</span></div>
+    <div class="hidden md:flex gap-10 text-[10px] uppercase tracking-[0.4em]">
+      <a href="https://streetarise.com" target="_blank">Store</a>
+      <a href="#">Instagram</a>
     </div>
-    <div class="h-[1px] w-12 bg-white/30"></div>
   </nav>
 
-  <section class="relative min-h-screen flex items-center px-6 pt-20">
-    <div class="container mx-auto grid lg:grid-cols-12 gap-10 items-center">
-
-      <div class="lg:col-span-7 z-10">
-        <span class="text-purple-400 text-xs font-bold uppercase tracking-[0.7em] mb-6 block">Welcome to the Club
-          💜</span>
-        <h1 class="text-7xl md:text-[8rem] font-serif leading-[0.85] mb-10 tracking-tighter">
-          Elevate <br> <span class="italic font-light opacity-80">Your Step.</span>
-        </h1>
-        <p class="text-gray-400 text-lg md:text-xl max-w-md mb-12 font-light leading-relaxed italic">
-          Tênis premium e importados com curadoria exclusiva. Onde a segurança encontra o desejo.
-        </p>
-        <a href="https://wa.me/62982431628" class="btn-arise inline-block">Acessar Grupo VIP</a>
-      </div>
-
-      <div class="lg:col-span-5 relative">
-        <div class="absolute inset-0 bg-purple-600 opacity-10 blur-[120px] rounded-full animate-pulse"></div>
-        <img id="hero-shoe" src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519"
-          class="w-full object-contain z-10 transition-transform duration-1000">
-      </div>
-    </div>
-  </section>
-
-  <section class="py-40 px-6 relative z-10">
-    <div class="max-w-7xl mx-auto">
-      <div class="grid md:grid-cols-3 gap-6">
-
-        <div class="arise-card p-12 h-[400px] flex flex-col justify-between">
-          <div class="card-glow"></div>
-          <span class="text-purple-400 font-serif italic text-3xl">01</span>
-          <div>
-            <h3 class="font-serif text-3xl mb-4 italic">Pague 01, Leve 02</h3>
-            <p class="text-gray-500 text-sm font-light leading-loose">A oportunidade mais aguardada da Arise, disponível
-              exclusivamente para membros do círculo VIP.</p>
-          </div>
+  <main>
+    <section class="relative min-h-screen flex items-center px-6 md:px-20 pt-32 pb-20">
+      <div class="container mx-auto grid lg:grid-cols-12 gap-10 md:gap-16 items-center">
+        <div class="lg:col-span-7 z-10 order-2 lg:order-1 text-center lg:text-left">
+          <span class="text-purple-400 text-[10px] md:text-xs font-bold uppercase tracking-[0.6em] mb-6 block">Exclusive
+            Access</span>
+          <h1
+            class="text-5xl md:text-[7.5rem] font-serif leading-[1.1] md:leading-[0.9] mb-8 md:mb-10 tracking-tighter">
+            Elevate <br class="hidden md:block"> <span class="italic font-light opacity-70">Your Step.</span>
+          </h1>
+          <p
+            class="text-gray-400 text-base md:text-xl max-w-md mx-auto lg:mx-0 mb-10 md:mb-14 font-light leading-relaxed italic">
+            Tênis premium com curadoria exclusiva. Onde a segurança encontra o desejo.
+          </p>
+          <a href="https://wa.me/62982431628"
+            class="btn-arise inline-block w-full md:w-auto uppercase text-white">Acessar Grupo VIP</a>
         </div>
 
-        <div class="arise-card p-12 h-[400px] flex flex-col justify-between md:mt-12">
-          <div class="card-glow"></div>
-          <span class="text-purple-400 font-serif italic text-3xl">02</span>
-          <div>
-            <h3 class="font-serif text-3xl mb-4 italic">Envio Nacional</h3>
-            <p class="text-gray-500 text-sm font-light leading-loose">Logística premium de Minas Gerais para todo o
-              Brasil. Compra segura com rastreio em tempo real.</p>
-          </div>
+        <div class="lg:col-span-5 relative flex justify-center order-1 lg:order-2">
+          <div class="absolute inset-0 bg-purple-600/10 blur-[80px] md:blur-[150px] rounded-full scale-125"></div>
+          <img id="hero-shoe"
+            src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&q=90&w=800"
+            class="w-[80%] md:w-[120%] h-auto object-contain z-10 drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)]">
         </div>
+      </div>
+    </section>
 
-        <div class="arise-card p-12 h-[400px] flex flex-col justify-between">
-          <div class="card-glow"></div>
-          <span class="text-purple-400 font-serif italic text-3xl">03</span>
-          <div>
-            <h3 class="font-serif text-3xl mb-4 italic">Antifraude</h3>
-            <p class="text-gray-500 text-sm font-light leading-loose">Atendimento humano e seguro por Lucas, Fernanda e
-              nosso time oficial. Sem intermediários, sem riscos.</p>
+    <section class="py-20 md:py-32 px-6 relative">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+
+          <div class="arise-card p-10 md:p-14 flex flex-col justify-between group">
+            <div class="card-glow"></div>
+            <div class="card-border-flash"></div>
+            <div class="flex justify-between items-start mb-12">
+              <span
+                class="text-purple-500 font-serif italic text-3xl md:text-4xl opacity-40 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-700">01</span>
+              <div
+                class="w-8 h-[1px] bg-white/20 mt-4 group-hover:w-20 group-hover:bg-purple-500 transition-all duration-700">
+              </div>
+            </div>
+            <div class="relative z-10">
+              <h3
+                class="font-serif text-3xl md:text-4xl mb-4 md:mb-6 italic transform group-hover:-translate-y-2 transition-transform duration-700">
+                Pague 01, Leve 02</h3>
+              <p class="text-gray-500 text-sm font-light leading-loose">Promoção exclusiva disponível apenas para
+                membros do círculo VIP.</p>
+            </div>
           </div>
+
+          <div class="arise-card p-10 md:p-14 flex flex-col justify-between md:mt-16 group">
+            <div class="card-glow"></div>
+            <div class="card-border-flash"></div>
+            <div class="flex justify-between items-start mb-12">
+              <span
+                class="text-purple-500 font-serif italic text-3xl md:text-4xl opacity-40 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-700">02</span>
+              <div
+                class="w-8 h-[1px] bg-white/20 mt-4 group-hover:w-20 group-hover:bg-purple-500 transition-all duration-700">
+              </div>
+            </div>
+            <div class="relative z-10">
+              <h3
+                class="font-serif text-3xl md:text-4xl mb-4 md:mb-6 italic transform group-hover:-translate-y-2 transition-transform duration-700">
+                Envio Nacional</h3>
+              <p class="text-gray-500 text-sm font-light leading-loose">Logística premium de Minas Gerais. Compra segura
+                com rastreio real.</p>
+            </div>
+          </div>
+
+          <div class="arise-card p-10 md:p-14 flex flex-col justify-between group">
+            <div class="card-glow"></div>
+            <div class="card-border-flash"></div>
+            <div class="flex justify-between items-start mb-12">
+              <span
+                class="text-purple-500 font-serif italic text-3xl md:text-4xl opacity-40 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-700">03</span>
+              <div
+                class="w-8 h-[1px] bg-white/20 mt-4 group-hover:w-20 group-hover:bg-purple-500 transition-all duration-700">
+              </div>
+            </div>
+            <div class="relative z-10">
+              <h3
+                class="font-serif text-3xl md:text-4xl mb-4 md:mb-6 italic transform group-hover:-translate-y-2 transition-transform duration-700">
+                Antifraude</h3>
+              <p class="text-gray-500 text-sm font-light leading-loose">Atendimento humano. Sem intermediários. Sua
+                confiança é o nosso ativo.</p>
+            </div>
+          </div>
+
         </div>
-
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="py-40 bg-white/5 backdrop-blur-sm px-6">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="font-serif text-5xl mb-12 italic">Segurança Arise 💜</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-70 text-[10px] uppercase tracking-[0.3em]">
-        <div class="border border-white/10 p-6">Atendimento Verificado</div>
-        <div class="border border-white/10 p-6">Rastreio Garantido</div>
-        <div class="border border-white/10 p-6">Produto Premium</div>
+    <section class="py-60 px-6 text-center relative overflow-hidden flex flex-col items-center justify-center">
+      <div id="circle-visual"
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] border border-purple-500/20 rounded-full pointer-events-none">
       </div>
-    </div>
-  </section>
 
-  <section class="py-60 px-6 text-center relative overflow-hidden">
-    <div id="circle-visual"
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-purple-500 opacity-10 rounded-full scale-150">
-    </div>
+      <div class="relative z-50 max-w-4xl mx-auto">
+        <h2 class="font-serif text-5xl md:text-8xl mb-16 italic leading-tight">As melhores peças chegam primeiro aqui.
+        </h2>
+        <a id="final-cta" href="https://wa.me/62982431628" class="btn-arise">Entrar na Comunidade</a>
+      </div>
+    </section>
+  </main>
 
-    <div class="relative z-10 max-w-2xl mx-auto">
-      <h2 class="font-serif text-6xl md:text-8xl mb-12 italic leading-tight">As melhores peças chegam primeiro aqui.
-      </h2>
-      <button onclick="window.location.href='https://wa.me/62982431628'" class="btn-arise">Entrar na Comunidade</button>
-    </div>
-  </section>
-
-  <footer class="py-20 border-t border-white/5 text-center">
-    <div class="font-serif italic text-2xl mb-4 opacity-40">Arise Group</div>
-    <p class="text-[8px] tracking-[0.6em] text-gray-600 uppercase">Minas Gerais • Brasil • Premium Sneakers</p>
+  <footer class="py-20 border-t border-white/5 text-center opacity-40">
+    <div class="font-serif italic text-2xl mb-4">Arise Group</div>
+    <p class="text-[9px] tracking-[0.6em] uppercase">Premium Sneakers • Brazil</p>
   </footer>
 
   <script>
-    // 1. ENGINE DE SCROLL (LENIS) - O Segredo do movimento profissional
-    const lenis = new Lenis({
-      duration: 2.0,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      lerp: 0.05 // Scroll ultra amanteigado
-    });
+    window.addEventListener('load', () => {
+      // 1. Revelar Body
+      gsap.to("body", { autoAlpha: 1, duration: 1 });
 
-    function raf(time) {
-      lenis.raf(time);
+      // 2. Lenis Scroll
+      const lenis = new Lenis();
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
       requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
 
-    // 2. SPOTLIGHT DYNAMICS (GPU Accelerated)
-    document.querySelectorAll('.arise-card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--x', `${x}px`);
-        card.style.setProperty('--y', `${y}px`);
+      // 3. Mouse Move Cards
+      document.querySelectorAll('.arise-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--x', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--y', `${e.clientY - rect.top}px`);
+        });
+      });
+
+      // 4. GSAP Animations
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Hero
+      gsap.from("h1", { y: 100, opacity: 0, duration: 2, ease: "expo.out" });
+      gsap.to("#hero-shoe", { y: -20, duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+      // Círculo e Botão Final
+      gsap.fromTo("#circle-visual",
+        { scale: 0.5, opacity: 0 },
+        {
+          scale: 2,
+          opacity: 0.5,
+          scrollTrigger: {
+            trigger: "#circle-visual",
+            start: "top bottom",
+            end: "bottom center",
+            scrub: 1
+          }
+        }
+      );
+
+      // Garante que o botão final apareça com impacto
+      gsap.from("#final-cta", {
+        scrollTrigger: {
+          trigger: "#final-cta",
+          start: "top 90%",
+        },
+        y: 30,
+        opacity: 0,
+        scale: 0.9,
+        duration: 1.5,
+        ease: "expo.out"
       });
     });
 
-    // 3. GSAP CINEMATIC ANIMATIONS
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Hero Reveal
-    gsap.from("h1", {
-      y: 100,
-      opacity: 0,
-      duration: 2,
-      ease: "expo.out",
-      delay: 0.5
-    });
-
-    // Shoe Float
-    gsap.to("#hero-shoe", {
-      y: -30,
-      duration: 2,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-
-    // Bento Reveal
-    gsap.from(".arise-card", {
-      scrollTrigger: {
-        trigger: ".grid",
-        start: "top 80%",
-      },
-      y: 60,
-      opacity: 0,
-      duration: 1.5,
-      stagger: 0.2,
-      ease: "power4.out"
-    });
-
-    // Circle Expansion
-    gsap.to("#circle-visual", {
-      scale: 1.6,
-      opacity: 0.3,
-      scrollTrigger: {
-        trigger: "#circle-visual",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 1
-      }
-    });
+    // Se o JS falhar, o botão TEM que aparecer
+    setTimeout(() => {
+      document.body.style.visibility = 'visible';
+      document.body.style.opacity = '1';
+    }, 3000);
   </script>
 </body>
 
